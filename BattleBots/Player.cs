@@ -73,7 +73,6 @@ namespace BattleBots
             for(int i = 0; i < 1; i++)
             {
                 HighestScore = Score;
-
             }
             if (Score > HighestScore)
                 HighestScore = Score;
