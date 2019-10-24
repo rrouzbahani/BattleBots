@@ -6,32 +6,19 @@ using System.Threading.Tasks;
 
 namespace BattleBots
 {
-    class Vehicle : Player
+    abstract class Vehicle : Player
     {
-        public int Fuel {get;set;}
-        public int HP {get;set;}
-        public int Points {get;set;}
-
-        public void FuelDown()
+        public int Fuel { get; set; } = 50;
+        public int HP { get; set; } = 50;
+        public void FuelDown(int amount)
         {
-            Fuel--;
+            Fuel-= amount;
         }
-        public void HPDown()
+        public void HPDown(int HPDecrease)
         {
-            HP--;
+            HP -= HPDecrease;
         }
-        public void PointsUp()
-        {
-            Points++;
-        }
-        public void HPUp()
-        {
-            HP++;
-        }
-        public void FuelUp()
-        {
-            Fuel++;
-        }
-        
+        abstract public void Heal();
+        abstract public void Refuel();
     }
 }

@@ -11,7 +11,7 @@ namespace BattleBots
         private string name;
         private int score;
         private int highestscore;
-        private string weapon;
+        private int points;
         public string Name
         {
             get
@@ -21,17 +21,6 @@ namespace BattleBots
             set
             {
                 name = value;
-            }
-        }
-        public string Weapon
-        {
-            get
-            {
-                return weapon;
-            }
-            set
-            {
-                weapon = value;
             }
         }
         public int Score
@@ -56,15 +45,28 @@ namespace BattleBots
                 highestscore = value;
             }
         }
+        public int Points
+        {
+            get
+            {
+                return points;
+            }
+            set
+            {
+                points = value;
+            }
+        }
         public Player()
         {
             Name = "Player";
-            Weapon = "Sledge Hammer";
         }
-        public Player(string name, string weapon)
+        public Player(string name)
         {
             Name = name;
-            Weapon = weapon;
+        }
+        public void addScore()
+        {
+            Score++;
         }
         public void Scoring()
         {
