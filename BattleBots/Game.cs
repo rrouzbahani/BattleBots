@@ -26,5 +26,21 @@ namespace BattleBots
             TimeStartGame++;
             TimeElapsed = TimeStartGame - TimeStartBattle;
         }
+        public void TheGame()
+        {
+            Random rGen = new Random();
+            int rNum = 0; rNum = rGen.Next(1,6);
+            switch (rNum)
+            {
+                case 1:
+                    {
+
+                        break;
+                    }
+
+
+            }
+
+        }
     }
 }
