@@ -9,6 +9,12 @@ namespace BattleBots
 {
     class Game
     {
+        public const string WEAPON_CIRCULAR_SAW = "Pikachu";
+        public const string WEAPON_CLAW_CUTTER = "Squirtle";
+        public const string WEAPON_FLAME_THROWER = "Pidgey";
+        public const string WEAPON_SLEDGE_HAMMER = "Geodude";
+        public const string WEAPON_SPINNNING_BLADE = "Swadloon";
+
         Timer timer;
         public int TimeStartGame;
         public int TimeStartBattle;

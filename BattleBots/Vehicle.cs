@@ -8,12 +8,7 @@ namespace BattleBots
 {
     abstract class Vehicle : Player
     {
-        public const string WEAPON_CIRCULAR_SAW = "Circular Saw";
-        public const string WEAPON_CLAW_CUTTER = "Claw Cutter";
-        public const string WEAPON_FLAME_THROWER = "Flame Thrower";
-        public const string WEAPON_SLEDGE_HAMMER = "Sledge Hammer";
-        public const string WEAPON_SPINNNING_BLADE = "Spinning Blade";
-
+        
         public int Fuel { get; set; } = 50;
         public int HP { get; set; } = 50;
         public string Weapon { get; set; }
