@@ -64,18 +64,13 @@ namespace BattleBots
         {
             Name = name;
         }
-        public void addScore()
+        public void addScore(int points)
         {
-            Score++;
+            Score += points;
         }
-        public void Scoring()
+        public void UpdateHighScore(int newScore)
         {
-            for(int i = 0; i < 1; i++)
-            {
-                HighestScore = Score;
-            }
-            if (Score > HighestScore)
-                HighestScore = Score;
+            HighestScore = newScore > HighestScore ? newScore : HighestScore;
         }
     }
 }

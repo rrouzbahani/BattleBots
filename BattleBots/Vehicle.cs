@@ -25,7 +25,7 @@ namespace BattleBots
         abstract public void Refuel(int FAddAmount);
         public Vehicle()
         {
-            Weapon = WEAPON_CIRCULAR_SAW;
+            Weapon = Game.WEAPON_CIRCULAR_SAW;
             Name = "Ash";
         }
         public Vehicle(string name, string weapon)
