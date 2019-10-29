@@ -27,8 +27,10 @@ namespace BattleBots
         private int intBattleStartTime;
         private int intTimeElapsed;
         private bool blnIsBattleSoundPlaying = false;
-        private SoundPlayer openingSound = new SoundPlayer(Resources.Pokemon_Open);
-        private SoundPlayer battleSound = new SoundPlayer(Resources.Pokemon_Battle);
+        System.Media.SoundPlayer openingSound = new System.Media.SoundPlayer(Resource1.Pokemon_Open);
+        System.Media.SoundPlayer battleSound = new System.Media.SoundPlayer(Resource1.Pokemon_Battle);
+        System.Media.SoundPlayer MeetingOak = new System.Media.SoundPlayer(Resource1.Pokemon_MeetingOak);
+
         public Game()
         {
             timer = new System.Timers.Timer();
@@ -42,16 +44,25 @@ namespace BattleBots
             intTimeSinceGameStart++;
             intTimeElapsed = intTimeSinceGameStart - intBattleStartTime;
         }
+
         public BattleBot PromptUserForBot()
         {
+            openingSound.Play();
             Console.WriteLine("Do you want to enable the reading out of all the text?");
             if (Console.ReadLine().Trim().ToLower()[0] != 'y')
             {
                 SpeakingConsole.EnableSpeaking = false;
             }
-            SpeakingConsole.WriteLine("Welcome to Battle Bots! This is a game where there is no winning (just like life). Your goal is to get the most possible points.\n\nTo start, please enter the name for your bot:");
+            Console.WriteLine("Welcome to Battle Bots, the theme of this game is Pokémon!\n");
+            SpeakingConsole.WriteLine("\nYou will choose a pokémon and are given its strengths, and its weaknesses.\nAfter choosing your pokémon you are set into a battle. Every pokémon has HP and Power Points, more commonly known as PP");
+            SpeakingConsole.WriteLine("\nWhen you have ran out of either of those, youre pokémon faints..");
+            Console.WriteLine("\nAfter the Music stops press Enter to see what Prof. Oak has in store for us....");
+            Console.ReadLine();
+            openingSound.Stop();
+            MeetingOak.Play();
+            SpeakingConsole.WriteLine("Prof.Oak <> Hello there! Welcome to the world of pokémon!\nMy name is Oak! People call me the pokémon Prof!\nThis world is inhabited by creatures called pokémon!/nFor some people, pokémon are pets. Others use them for fights.\nMyself...I study pokémon as a profession.");
             string strName = SpeakingConsole.ReadLine();
-            SpeakingConsole.WriteLine("\nPlease choose a weapon from the following:");
+            SpeakingConsole.WriteLine("\n Do you see that ball on the table? It's called a Poké Ball.\nIt holds a Pokémon inside. You may have it! Go on, take it! Go ahead, it's yours!");
 
             foreach (string weapon in WEAPONS)
             {
@@ -63,6 +74,7 @@ namespace BattleBots
             {
                 SpeakingConsole.WriteLine("Please enter a valid weapon from above");
             }
+            MeetingOak.Stop();
             timer.Start();
             intTimeSinceGameStart = 0;
             if (IsValidWeapon(strWeapon))

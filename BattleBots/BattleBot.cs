@@ -28,5 +28,10 @@ namespace BattleBots
             Name = name;
             Weapon = weapon;
         }
+        public BattleBot(string weapon)
+        {
+            Weapon = weapon;
+            Weapon = Game.WEAPON_FLAME_THROWER;
+        }
     }
 }
