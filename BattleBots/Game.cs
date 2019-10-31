@@ -31,11 +31,11 @@ namespace BattleBots
         System.Media.SoundPlayer battleSound = new System.Media.SoundPlayer(Resource1.Pokemon_Battle);
         System.Media.SoundPlayer MeetingOak = new System.Media.SoundPlayer(Resource1.Pokemon_MeetingOak);
 
-        System.Media.SoundPlayer PikachuSFX = new System.Media.SoundPlayer(Resource1.Thunderbolt__1_);
-        System.Media.SoundPlayer CharmandarSFX = new System.Media.SoundPlayer(Resource1.Flamethrower);
-        System.Media.SoundPlayer BulbSFX = new System.Media.SoundPlayer(Resource1.Vine_Whip);
-        System.Media.SoundPlayer SquirtleSFX = new System.Media.SoundPlayer(Resource1.Bubble_Beam_part_1);
-        System.Media.SoundPlayer GeoSFX = new System.Media.SoundPlayer(Resource1.Rock_Tomb__1_);
+       static System.Media.SoundPlayer PikachuSFX = new System.Media.SoundPlayer(Resource1.Thunderbolt__1_);
+       static System.Media.SoundPlayer CharmandarSFX = new System.Media.SoundPlayer(Resource1.Flamethrower);
+       static System.Media.SoundPlayer BulbSFX = new System.Media.SoundPlayer(Resource1.Vine_Whip);
+       static System.Media.SoundPlayer SquirtleSFX = new System.Media.SoundPlayer(Resource1.Bubble_Beam_part_1);
+       static System.Media.SoundPlayer GeoSFX = new System.Media.SoundPlayer(Resource1.Rock_Tomb__1_);
 
         public static ConsoleColor[] WEAPON_COLORS = new ConsoleColor[] { ConsoleColor.Yellow, ConsoleColor.Blue, ConsoleColor.DarkRed, ConsoleColor.Gray, ConsoleColor.Green };
         public static string[] WEAPON_TYPES = new string[] { "Electric", "Water", "Flying", "Rock/Ground", "Grass" };
@@ -54,7 +54,7 @@ namespace BattleBots
             intTimeElapsed = intTimeSinceGameStart - intBattleStartTime;
         }
 
-        public BattleBot PromptUserForBot()
+        public BattleBot PromptUserForBot(int highScore)
         {
             openingSound.Play();
             Console.WriteLine("Do you want to enable the reading out of all the text?");
@@ -76,7 +76,7 @@ namespace BattleBots
             Console.WriteLine("What is your name, younge trainer?");
             string strName = Console.ReadLine();
             Console.ForegroundColor = ConsoleColor.DarkYellow;
-            Console.WriteLine("\n ahhh, "+ strName + " was it? Do you see that ball on the table? It's called a Poké Ball.\nIt holds a Pokémon inside. You may have it! Go on, take it! Go ahead, it's yours!");
+            Console.WriteLine("\n ahhh, " + strName + " was it? Do you see that ball on the table? It's called a Poké Ball.\nIt holds a Pokémon inside. You may have it! Go on, take it! Go ahead, it's yours!");
             Console.ForegroundColor = ConsoleColor.White;
             SpeakingConsole.WriteLine("\nPlease choose a Pokemon from the following:");
 
@@ -103,24 +103,27 @@ namespace BattleBots
             MeetingOak.Stop();
             timer.Start();
             intTimeSinceGameStart = 0;
+            BattleBot result;
             if (IsValidWeapon(strWeapon))
             {
                 if (strName != "")
                 {
-                    return new BattleBot(strName, GetValidWeaponName(strWeapon));
+                    result = new BattleBot(strName, GetValidWeaponName(strWeapon));
                 }
                 else
                 {
-                    return new BattleBot(GetValidWeaponName(strWeapon));
+                    result = new BattleBot(GetValidWeaponName(strWeapon));
                 }
             }
             else
             {
-                return new BattleBot();
+                result = new BattleBot();
             }
+            result.UpdateHighScore(highScore);
+            return result;
         }
 
-        public void Battle(ref BattleBot battleBot)
+            public void Battle(ref BattleBot battleBot)
         {
             if (!blnIsBattleSoundPlaying)
             {
@@ -134,13 +137,13 @@ namespace BattleBots
                 string computerWeapon = WEAPONS[rGen.Next(WEAPONS.Length)];
                 Console.ForegroundColor = GetColorForWeapon(battleBot.Weapon);
                 Console.WriteLine("███████████████████████████");
-                SpeakingConsole.WriteLine("\n\t\t" + battleBot.Weapon + "           ");
+                SpeakingConsole.WriteLine("\n\t" + battleBot.Weapon + "           ");
 
                 Console.ForegroundColor = ConsoleColor.White;
-                SpeakingConsole.WriteLine("\n\t\t----- VS -----   ");
+                SpeakingConsole.WriteLine("\n\t----- VS -----   ");
 
                 Console.ForegroundColor = GetColorForWeapon(computerWeapon);
-                SpeakingConsole.WriteLine("\n\t\t" + computerWeapon);    // Pokemon
+                SpeakingConsole.WriteLine("\n\t" + computerWeapon);    // Pokemon
                 Console.WriteLine("███████████████████████████");
 
                 Console.ForegroundColor = ConsoleColor.White;
@@ -242,12 +245,17 @@ namespace BattleBots
                             {
                                 blnValidAction = true;
                                 SpeakingConsole.WriteLine("You have succesfully absorbed the opponent's power!! This tastes yummy OwO");
+                                Console.WriteLine("Professor Oak<> MMMMMmmmm... Fried " + battleBot.Weapon);
                                 battleBot.Refuel(10);
                                 battleBot.Heal(10);
                             }
                             break;
                     }
-
+                    if (blnValidAction)
+                    {
+                        GetSoundForWeapon(battleBot.Weapon).PlaySync();
+                        battleSound.Play();
+                    }
                 }
                 Thread.Sleep(1000);
                 SpeakingConsole.WriteLine("\nBot stats:\nName: " + battleBot.Name + "\nWeapon: " + battleBot.Weapon + "\nHP: " + battleBot.HP + "\nPower Points Left: " + battleBot.Fuel + "\nTurn Time: " + intTimeElapsed + "\nTotal Battle Time: " + intTimeSinceGameStart + "\nPoints: " + battleBot.Score + "\nHighest Score: " + battleBot.HighestScore);
@@ -258,9 +266,10 @@ namespace BattleBots
             {
                 battleBot.UpdateHighScore(battleBot.Score);
                 SpeakingConsole.WriteLine("Your bot has lost. Do you want to play again?");
-                if (SpeakingConsole.ReadLine().Trim().ToLower()[0] == 'y')
+                string strInput = "";
+                if ((strInput = SpeakingConsole.ReadLine()) != "" && strInput.Trim().ToLower()[0] == 'y')
                 {
-                    battleBot = PromptUserForBot();
+                    battleBot = PromptUserForBot(battleBot.HighestScore);
                     Battle(ref battleBot);
                 }
 
@@ -336,6 +345,23 @@ namespace BattleBots
         private static string GetTypeForWeapon(string weapon)
         {
             return WEAPON_TYPES[Array.FindIndex(WEAPONS, s => weapon.Trim().ToLower() == s.Trim().ToLower())];
+        }
+        private static SoundPlayer GetSoundForWeapon(string weapon)
+        {
+            switch (weapon)
+            {
+                case WEAPON_CIRCULAR_SAW:
+                    return PikachuSFX;
+                case WEAPON_CLAW_CUTTER:
+                    return SquirtleSFX;
+                case WEAPON_FLAME_THROWER:
+                    return CharmandarSFX;
+                case WEAPON_SLEDGE_HAMMER:
+                    return BulbSFX;
+                case WEAPON_SPINNNING_BLADE:
+                    return GeoSFX;
+            }
+            return null;
         }
     }
         }

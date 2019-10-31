@@ -12,7 +12,7 @@ namespace BattleBots
         {
             
             Game game = new Game();
-            BattleBot bot = game.PromptUserForBot();
+            BattleBot bot = game.PromptUserForBot(0);
             SpeakingConsole.WriteLine("Bot stats:\nName: " + bot.Name + ",\nWeapon: " + bot.Weapon + ",\nCondition Level: " + bot.HP + ",\nFuel Level: " + bot.Fuel);
             game.Battle(ref bot);
             Console.ReadLine();
